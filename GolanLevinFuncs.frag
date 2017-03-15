@@ -1,6 +1,7 @@
 /*-------------------------------------
 A porting of Golan Levin's functions
 Polynomial Shaping Functions
+Darien Brito, 2017
 
 A collection of polynomial functions for shaping, 
 tweening, and easing signals in the range [0...1]. 
