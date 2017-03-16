@@ -45,9 +45,7 @@ float shapingFive(float x, float e) {
 	return 1.0 - pow(max(0.1, abs((2.0 * PI * x) - PI) - 2.0), e);
 }
 
-
 //-------- Main ----------//
-
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
 	
