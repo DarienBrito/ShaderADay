@@ -50,11 +50,11 @@ void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
 	
 	// Try the functions
-	//float y = shapingOne(st.x, sineMovement(1.0, 1.0));
+	float y = shapingOne(st.x, sineMovement(1.0, 1.0));
 	//float y = shapingTwo(st.x, sineMovement(1.0, 3.5), 2.0); // 2 periods
 	//float y = shapingThree(st.x , sineMovement(1.0, 0.5), 3.0); // 3 periods
 	//float y = shapingFour(st.x, sineMovement(1.0, 0.5), 3.0); // interesting on many periods
-	float y = shapingFive(st.x, sineMovement(1.0, 0.6));
+	//float y = shapingFive(st.x, sineMovement(1.0, 0.6));
 
 	vec3 color = vec3(y);
 	float p = plotter(st, y);
