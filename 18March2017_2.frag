@@ -24,7 +24,7 @@ void main() {
 	r += 0.005 * cos(100.0 * q.y);
 	r += exp(-40.0 * st.y);
 	// Here do the weird smmothstep operations to get rid of the part we dont need
-	c *= 1.0 - (1.0 - smoothstep(r, r + 0.001, abs(q.x + -1.0 * sin(q.y * 2.0) * 0.3))) * (1.0 - smoothstep(0.5, 0.51, st.y));
+	c *= 1.0 - (1.0 - smoothstep(r, r + 0.001, abs(q.x - 1.0 * sin(q.y * 2.0) * 0.3))) * (1.0 - smoothstep(0.5, 0.51, st.y));
 
 	gl_FragColor = vec4(c, 1.0);
 }
