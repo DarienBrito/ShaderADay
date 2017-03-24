@@ -22,12 +22,12 @@ void main() {
 	st = st * 2.0 - 1.0; // remap to -1 to 1
 	// N x is -1 to 1, abs makes 2 copies of values from 0 to 1, from the total
 	// Same for y. That's why we have now 4 "copies" of the same thing
-	d = length( abs(st) - 0.3);
+	d = length( abs(st) - 0.8);
 	
 	// Create a squarish pattern (makes sense if you follow along step by step)
 	//d = length( max(abs(st) - 0.3, 0.0));
 
-	float n = 4.0;
+	float n = 7.0;
 	d = fract(d * n - u_time); // fractioning that into n pieces and animating
 
 	// Create an outline
