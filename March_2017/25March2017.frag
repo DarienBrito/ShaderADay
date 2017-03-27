@@ -6,7 +6,6 @@ Darien Brito, 25, March, 2017
 */
 
 // Translation by moving the whole coordinate system via vectors
-
 #define PI 3.141592653
 uniform float u_time;
 uniform vec2 u_resolution;
