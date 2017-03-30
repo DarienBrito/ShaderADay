@@ -1,3 +1,10 @@
+/*
+Excercising fractional thinking
+--------------------
+Shader-a-day
+Darien Brito, 28-March, 2017
+*/
+
 uniform float u_time;
 uniform vec2 u_resolution;
 
@@ -12,21 +19,20 @@ float shape(vec2 st, int numSides, float size) {
 	return 1.0 - smoothstep(size, size + 0.01, d);
 }
 
+vec2 tile(vec2 st, vec2 dim) {
+	return fract(st * dim);
+}
+
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
-	//st = st * 2.0 - 1.0;
 	st *= 3.0;
+	float even = mod(st.y, 2.0);
+	st.x += step(1.0, even) * u_time;
+
 	st = fract(st);
 	st = st - 0.5;
 
-	float color = shape(st, 4, 0.3);
-	float index = floor(st.x); // Get index? Would this work?
-
-	if(int(index) > 1) {
-		color *= 0.0;
-	} else{
-		color *= 1.0;
-	}
+	float color = shape(st, 6 , 0.3);
 
 	gl_FragColor = vec4(vec3(color), 1.0);
 }
