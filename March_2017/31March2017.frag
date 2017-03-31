@@ -11,7 +11,7 @@ uniform float u_time;
 
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
-	st *= 3.0; // 3 by 3 matrix
+	st *= 7.0; // 7x7 matrix
 	vec2 check = mod(st, vec2(2.0)); // Will return 0 or 1
 	check = step(1.0, check); // 0 if odd 1 if even
 	st = fract(st);
