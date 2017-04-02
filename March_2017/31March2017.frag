@@ -15,7 +15,6 @@ void main() {
 	vec2 check = mod(st, vec2(2.0)); // Will return 0 or 1
 	check = step(1.0, check); // 0 if odd 1 if even
 	st = fract(st);
-
 	float d = length(st - vec2(0.5));
 	d = sin(d * PI + (u_time * (check.x + 1.0))) * 0.5 + 0.5;
 	d = cos(d * PI + (u_time * (check.y + 1.0)));
