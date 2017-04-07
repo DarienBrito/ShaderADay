@@ -19,7 +19,7 @@ float random(in vec2 st) {
 }
 
 float noisePattern(float x, float freq, float t) {	   
-	return step(.8, random(floor(x * freq)-floor(t)) ); // Not as easy as it looks like...
+	return step(.8, random( floor(x * freq) - floor(t) )); // Not as easy as it looks like...
 
 }
 
