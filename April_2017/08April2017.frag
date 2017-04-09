@@ -42,7 +42,7 @@ void main() {
 
 	float detail = sin(u_time) * 0.1 + 0.4;
 
-	// Controls
+	// Shaping
 	n = sin(n * 60.0);
 	n += d;
 	n += cos(a * 32.0 + u_time) * detail;
