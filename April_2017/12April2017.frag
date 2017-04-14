@@ -2,13 +2,18 @@
 uniform vec2 u_resolution;
 uniform float u_time;
 
+// Generate random points
 vec2 random2(vec2 p) {
-	return fract(sin(vec2(dot(p, vec2(121.1314, 43.3123)), dot(p, vec2(44.1451, 12.1314)) )) * 12531.55);
+	return fract(sin(vec2(
+		dot(p, vec2(121.1314, 43.3123)), 
+		dot(p, vec2(44.1451, 12.1314)) 
+		)) * 12531.55);
 }
 
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
 	vec3 color = vec3(0.0);
+	bool GUIDES = true; // Select to select guides or not
 
 	// Scale coordinate system
 	st *= 10.0;
@@ -24,13 +29,14 @@ void main() {
 
 	// Draw gradients
 	color += dist;
-	// Draw point centres
-	color += 1.0 - step(0.01, dist);
-	// Draw grid
-	color.r += step(0.98, f.x);
-	color.r += step(0.98, f.y);
 
-
+	if(GUIDES) {
+		// Draw point centres
+		color += 1.0 - step(0.01, dist);
+		// Draw grid
+		color.r += step(0.98, f.x);
+		color.r += step(0.98, f.y);
+	}
 
 	gl_FragColor = vec4(color, 1.0);
 }
