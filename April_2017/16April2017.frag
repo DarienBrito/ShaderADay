@@ -62,8 +62,8 @@ void main() {
 		for(int x = -1; x <= 1; x++){ //Check up and bottom neighbours
 			vec2 neighbour = vec2(float(x), float(y));
 			vec2 p = random2(i + neighbour); // Generate random position
-			p = 0.5 + 0.5 * sin(p*TWO_PI + ((cos(u_time) * 40.0 + 40.0) * gradientNoise(st * 0.25))); // Apply some distortion to phase
-	//		p = 0.5 + 0.5 * sin(p*TWO_PI + (80.0 * gradientNoise(st * 0.25))); // Apply some distortion to phase
+	//		p = 0.5 + 0.5 * sin(p*TWO_PI + ((cos(u_time) * 40.0 + 40.0) * gradientNoise(st * 0.25))); // Apply some distortion to phase
+			p = 0.5 + 0.5 * sin(p*TWO_PI + (80.0 * gradientNoise(st * 0.25))); // Apply some distortion to phase
 
 			vec2 diff = (p + neighbour) - f;
 			float dist = length(diff);
@@ -78,13 +78,13 @@ void main() {
 
 	// Assign a color using closest point
 	//color += dot(m_point, vec2(0.5));
-	color += vec3(m_point, sin(u_time)*.5+.5);
+	//color += vec3(m_point, sin(u_time)*.5+.5);
 
 	// Show isolines
-    color -= abs(sin(40.0*m_dist))*0.07;
+    //color -= abs(sin(40.0*m_dist))*0.07;
 
 	//Draw center point
-	color += 1.0 - step(0.1, m_dist);
+	color += 1.0 - step(0.35, m_dist);
 
 	//Draw grid
 	color.r += step(0.98, f.x) + step(0.98, f.y);
