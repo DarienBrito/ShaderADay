@@ -90,11 +90,6 @@ float snoise(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
-mat2 rotate2d(float angle) {
-	return mat2(cos(angle), -sin(angle),
-				sin(angle), cos(angle));
-}
-
 float fbm(vec2 st) {
 	float n = 0.0;
 	float a = 0.55;
@@ -183,11 +178,12 @@ void main() {
         c = warpingTurbulence(st, scale);
     } else if (PATTERN == 2) {
         c = warpingRidge(st, scale);
-
     } else if (PATTERN == 3) {
         c = warpingHybrid(st, scale);
     } else if (PATTERN == 4) {
         c = warpingHybrid2(st, scale);
+    } else {
+        c = 1.0; // White if no pattern found
     }
 
     vec3 color = vec3(c);
