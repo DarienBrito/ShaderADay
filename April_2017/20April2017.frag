@@ -93,10 +93,7 @@ float snoise(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
-mat2 rotate2d(float angle) {
-	return mat2(cos(angle), -sin(angle),
-				sin(angle), cos(angle));
-}
+// Now let's make some FBM funcs with that nice simplex noise
 
 float fbm(vec2 st) {
 	float n = 0.0;
@@ -199,11 +196,12 @@ void main() {
         c = warpingTurbulence(st, scale);
     } else if (PATTERN == 2) {
         c = warpingRidge(st, scale);
-
     } else if (PATTERN == 3) {
         c = warpingHybrid(st, scale);
     } else if (PATTERN == 4) {
         c = warpingHybrid2(st, scale);
+    } else {
+        c = 1.0;
     }
 
     vec3 color = vec3(c);

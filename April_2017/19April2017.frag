@@ -90,6 +90,8 @@ float snoise(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
+// Now let's make some FBM funcs with that nice simplex noise
+
 float fbm(vec2 st) {
 	float n = 0.0;
 	float a = 0.55;
