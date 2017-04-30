@@ -172,7 +172,7 @@ void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
     st.x *= u_resolution.x/u_resolution.y;
     float c = 0.0;
-    float scale = 2.0;
+    float scale = 10.0;
 
     if(PATTERN == 0) {
     	c = warpingFBM(st, scale);
