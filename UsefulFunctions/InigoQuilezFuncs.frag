@@ -37,9 +37,9 @@ float impulse( float k, float x )
 float cubicPulse( float c, float w, float x )
 {
     x = fabsf(x - c);
-    if( x>w ) return 0.0f;
+    if( x>w ) return 0.0;
     x /= w;
-    return 1.0f - x*x*(3.0f-2.0f*x);
+    return 1.0 - x*x*(3.0-2.0*x);
 }
 
 
@@ -51,7 +51,7 @@ float expStep( float x, float k, float n )
 
 float parabola( float x, float k )
 {
-    return powf( 4.0f*x*(1.0f-x), k );
+    return powf( 4.0*x*(1.0-x), k );
 }
 
 

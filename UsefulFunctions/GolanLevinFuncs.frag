@@ -142,10 +142,10 @@ void main() {
 
 	//float y = blinnWyvillCosineApproximation(st.x);
 	//float y = doubleCubicSeat(st.x, 0.4, 0.7 * sineMov);
-	//float y = doubleCubicSeatWithLinearBlend(st.x, 0.4, 0.7 * sineMov);
+	float y = doubleCubicSeatWithLinearBlend(st.x, 0.4, 0.7 * sineMov);
 	//float y = doubleOddPolynomialSeat(st.x, 0.4, 0.7, sineMov);
 	//float y = doublePolynomialSigmoid(st.x, 0.9, 0.7, sineMov * 10.0);
-	float y = quadraticThroughAGivenPoint(st.x, 0.5, sineMov);
+	//float y = quadraticThroughAGivenPoint(st.x, 0.5, sineMov);
 
 	float p = plotter(st, y);
 	vec3 color = vec3(y);
