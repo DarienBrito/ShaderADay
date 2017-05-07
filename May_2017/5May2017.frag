@@ -1,13 +1,12 @@
 /*
-Fractional noise
-Playing around
+Re-visiting fbm
 --------------------
 Shader-a-day
-Darien Brito, 17, April, 2017
+Darien Brito, May 7, 2017
 */
 
-uniform vec2 u_resolution;
 uniform float u_time;
+uniform vec2 u_resolution;
 #define PI 3.141592653589
 
 // Some useful functions
@@ -84,63 +83,33 @@ float snoise(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
-#define OCTAVES 5
-
-float fbm(vec2 st) {
+float fbm(vec2 st, int octaves) {
 	float n = 0.0;
 	float a = 0.5;
-	for(int i = 0; i < OCTAVES; i++){
+	float s = 2.0;
+	for(int i = 0; i < octaves; i++){
 		n += snoise(st) * a;
-		st *= 2.0;
+		st *= s;
 		a *= 0.5;
 	}
 	return n;
-}
-
-float turbulence(vec2 st) {
-	float n = 0.0;
-	float a = 0.5;
-	for(int i = 0; i < OCTAVES; i++){
-		n += abs(snoise(st)) * a; // Get the abs value of signed noise!
-		st *= 2.0;
-		a *= 0.5;
-	}
-	return n;
-}
-
-// A simple version of ridge (not multifractal):
-float ridge(vec2 st) {
-	float n = 0.0;
-	float a = 1.0;
-	float offset = 1.0;
-	for(int i = 0; i < OCTAVES; i++){
-		n += abs(snoise(st)) * a; 
-		st *= 2.0;
-		a *= 0.5;
-	}
-	n = abs(n);
-	n = offset - n;
-	n *= n; // faster than pow?
-	return n;		
-}
-
-mat2 rotate2d(float angle) {
-    return mat2(cos(angle), -sin(angle),
-                sin(angle), cos(angle));
 }
 
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
-    st -= 0.5;
 
-    float dist = length(st * 4.0);
-    float n = snoise(st * 3.0 + (u_time * 0.01));
-    vec2 q = st * rotate2d(n + (sin(u_time * 0.1) * PI));
-	float c = ridge(q * 4.0);
-    //Invert colors
-    c = 1.0 - (c * dist);
-    c = pow(c, 4.0);
+	float scale = 2.0;
+	int octaves = 4;
+	float speed = 0.1;
+	float f1 = fbm((st * scale) + vec2(0.0, u_time * speed), octaves);
+	float f2 = fbm((st * scale) + vec2(10.5, 32.1 + u_time * speed), octaves);
+	float c = fbm(vec2(f1, f2), 5);
+	
+	vec3 color = vec3(c);
+	color = mix(vec3(0.1, 0.0, 0.3), vec3(0.8, 0.3, 1.0), color);
+	color += mix(vec3(0.0, 0.25, 0.1), vec3(0.1, 2.0, 0.5), color);
 
-    vec3 color = vec3(c);
+	//color = clamp(0.0, 1.0, color);
 	gl_FragColor = vec4(color, 1.0);
+	
 }

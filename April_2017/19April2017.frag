@@ -14,7 +14,7 @@ uniform vec2 u_resolution;
 #define TWO_PI 6.28318530718
 #define OCTAVES 8
 #define PATTERN 3
-#define GAIN 6.0
+#define GAIN 5.0
 
 // Some useful functionscolor = mix(vec3(0.1, 0.0, 0.0), vec3(0.8, 0.88, 0.6), color);
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -172,18 +172,20 @@ void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
     st.x *= u_resolution.x/u_resolution.y;
     float c = 0.0;
-    float scale = 10.0;
+    float scale = 1.0;
+
+    vec2 movement = vec2(0.0, u_time * 0.1);
 
     if(PATTERN == 0) {
-    	c = warpingFBM(st, scale);
+    	c = warpingFBM(st + movement, scale);
     } else if (PATTERN == 1) {
-        c = warpingTurbulence(st, scale);
+        c = warpingTurbulence(st + movement, scale);
     } else if (PATTERN == 2) {
-        c = warpingRidge(st, scale);
+        c = warpingRidge(st + movement, scale);
     } else if (PATTERN == 3) {
-        c = warpingHybrid(st, scale);
+        c = warpingHybrid(st + movement, scale);
     } else if (PATTERN == 4) {
-        c = warpingHybrid2(st, scale);
+        c = warpingHybrid2(st + movement, scale);
     } else {
         c = 1.0; // White if no pattern found
     }

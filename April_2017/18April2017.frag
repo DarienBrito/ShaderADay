@@ -105,6 +105,7 @@ float fbm(vec2 st) {
 float turbulence(vec2 st) {
 	float n = 0.0;
 	float a = 0.5;
+    float increment = 0.1;
 	for(int i = 0; i < OCTAVES; i++){
 		n += abs(snoise(st)) * a; // Get the abs value of signed noise!
 		st *= 2.0;
@@ -115,11 +116,15 @@ float turbulence(vec2 st) {
 
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
+    st.x *= u_resolution.x/u_resolution.y;
 	st -= 0.5; // Move to center
-	float gridScale = 15.0;
-	float modulationScale = 10.0;
-	vec3 color = vec3(fbm(st * (fbm(st * modulationScale) * gridScale)));
-	//color = mix(vec3(0.1, 0.2, 0.1), vec3(0.76, 0.88, 0.9), color);
-	color = mix(vec3(0.1, 0.0, 0.0), vec3(0.8, 0.88, 0.6), color);
+	float gridScale = 3.0;
+	float modulationScale = 3.0;
+    vec2 motion = vec2(u_time * 0.2, 0.0);
+	vec3 color = vec3(fbm(st * (fbm((st + motion) * modulationScale) * gridScale)));
+	color = mix(vec3(0.01, 0.2, 0.1), vec3(0.76, 0.88, 0.9), color);
+	color = mix(color, vec3(0.9, 0.4, 0.1), length(st));
+    color = 1.0 - color;
+    color *= color;
 	gl_FragColor = vec4(color, 1.0);
 }
