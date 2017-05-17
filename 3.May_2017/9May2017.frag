@@ -29,23 +29,6 @@ vec3 getNormal( vec3 p ){
 	return normalize( vec3( deltaX, deltaY, deltaZ ) );    
 }
 
-// float trace( vec3 origin, vec3 direction, out vec3 p ) {
-// 	float totalDistanceTraveled = 0.0;
-// 	for( int i=0; i <32; ++i) {
-// 		p = origin + direction * totalDistanceTraveled;
-// 		float distanceFromPointOnRayToClosestObjectInScene = scene( p );
-// 		totalDistanceTraveled += distanceFromPointOnRayToClosestObjectInScene;
-// 		if( distanceFromPointOnRayToClosestObjectInScene < 0.0001 ){
-// 			break; 
-// 		}
-// 		if( totalDistanceTraveled > 10000.0 ) {
-// 			totalDistanceTraveled = 0.0000; 
-// 			break; 
-// 		}
-// 	}
-// 	return totalDistanceTraveled;
-// }
-
 float trace(vec3 origin, vec3 direction, out vec3 p) {
 	float currentDistance = 0.0;
 	for(int i = 0; i < 32; ++i) {
@@ -102,7 +85,8 @@ void main() {
         float ly = 3.0 + mix( -1.5, 1.5, sin(u_time * 1.3) * 0.5 + 0.5);
 		//float lightRadius = 20.0;
 //		vec3 lightPosition = vec3(cos(u_time) * lightRadius, sin(u_time) * lightRadius, -10.0);
-		vec3 lightPosition = vec3(lx, ly, -10.0);
+		//vec3 lightPosition = vec3(lx, ly, -10.0);
+		vec3 lightPosition = vec3(0.0, 0.0, -10.0);
 		vec3 surfaceNormal = getNormal(pointOnSurface);
 		color = calculateLighting(pointOnSurface, surfaceNormal, lightPosition, cameraPos);
 	}
