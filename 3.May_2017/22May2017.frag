@@ -52,7 +52,7 @@ float unionSDF(float geo1, float geo2) {
 }
 
 float differenceSDF(float geo1, float geo2){
-	// reverse the effect of union
+	// reverse the effect of intersection
 	return max(geo1, -geo2);
 }
 
@@ -167,7 +167,7 @@ vec3 getNormals(vec3 p, float delta) {
 		float fog = pow(1.0 / (1.0 + dist), fogVal);
 		vec3 normal = getNormals(p, 0.01);
 		vec3 material = vec3(.23, .22, 0.75); 
-		vec3 light_dir = normalize(vec3(0.0, sin(u_time), 1.0));
+		vec3 light_dir = normalize(vec3(0.0, 1.0, 1.0));
 		float diffuse = dot(light_dir, normal);
 		//diffuse *= 0.5 + 0.5; // Make that shit positive
 		// For real diffuse, use this instead (to avoid negative light)
