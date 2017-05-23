@@ -9,6 +9,7 @@ Darien Brito, 23 May 2017
 #define STEPS 64
 #define HI_THRES 100.0
 #define LO_THRES 0.001
+#define PRIMITIVE 0
 
 uniform vec2 u_resolution;
 uniform float u_time;
@@ -26,11 +27,6 @@ float sphere(vec3 p, float r) {
 // Unsigned box
 float udBox( vec3 p, vec3 b ){
   return length(max(abs(p)-b,0.0));
-}
-
-// Unsigned round-box
-float udRoundBox( vec3 p, vec3 b, float r ){
-  return length(max(abs(p)-b,0.0))-r;
 }
 
 // Signed torus
@@ -101,8 +97,19 @@ float scene(vec3 p) {
 	float amp = 0.05;
 	vec3 pos = p * rotate(u_time * 0.5, 1);
 	float displacement = amp*sin(pos.x * freq) * sin(pos.y * freq) * sin(pos.z * freq);
-	float s = sphere(pos, 0.5) + displacement;
-	return s;
+	float s;
+	if(PRIMITIVE == 0) {
+		s = sphere(pos, 0.5);
+	} else if (PRIMITIVE == 1){
+		s = sdHexPrism(pos, vec2(0.5, 0.1));
+	} else if (PRIMITIVE == 2){
+		s = sdTorus(pos, vec2(0.5, 0.2));
+	} else if (PRIMITIVE == 3) {
+		s = udBox(pos, vec3(0.45));
+	} else {
+		s = sphere(pos, 0.5);
+	}
+	return s + displacement;
 }
 
 /*	
