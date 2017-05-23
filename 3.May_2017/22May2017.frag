@@ -158,7 +158,7 @@ vec3 getNormals(vec3 p, float delta) {
 	----------------
 	DEFINE LIGHTNING
 	----------------	
-	-	We are using here a Lambertian light, which is ismple enough for me to understand :P
+	-	We are using here a Lambertian light, which is simple enough for me to understand :P
 	-	For any shading we need to get normals information
 	-	For lightning we define some parameters such as material, diffuse and ambient
 	-	Lambert lighting is the dot product of a directional light and the normal!

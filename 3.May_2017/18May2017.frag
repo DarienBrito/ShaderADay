@@ -11,7 +11,7 @@ Darien Brito,
 uniform vec2 u_resolution;
 uniform float u_time;
 
-#define STEPS 15 // Increasing the steps will sharpen the render ( i kind of like it warpy )
+#define STEPS 8 // Increasing the steps will sharpen the render ( i kind of like it warpy )
 #define LOW_THRES 0.0001
 #define HI_THRES 100.0
 #define EPSILON 0.1
@@ -196,7 +196,8 @@ void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution * 2.0 - 1.0;
 	st.x *= u_resolution.x/u_resolution.y;
 	// This is basically a "look at" implementation, 
-	vec3 cameraPosition = vec3(cos(u_time) * 2.0, sin(u_time) * 2.0, sin(u_time) * 2.0 - 6.0);
+    float delta = u_time + 3.14;
+	vec3 cameraPosition = vec3(cos(delta) * 2.0, sin(delta) * 2.0, sin(delta) * 2.0 - 6.0);
 	vec3 direction = normalize(vec3(st.xy, -1.0)); // Every point in the pixel grid
 	//vec3 direction = normalize(vec3(st.xy / 2, -1.0));
 	mat4 viewToWorld = viewMatrix(cameraPosition, vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));

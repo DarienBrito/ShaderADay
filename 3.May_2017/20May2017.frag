@@ -277,6 +277,7 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     return color;
 }
 
+
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution * 2.0 - 1.0;
 	st.x *= u_resolution.x/u_resolution.y;
