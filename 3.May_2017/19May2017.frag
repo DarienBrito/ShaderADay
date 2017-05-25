@@ -282,7 +282,6 @@ void main() {
 	vec3 color = vec3(0.0);
 	if(marcher > 0.0){
 		vec3 lightPosition = vec3(0.0, 0.0, -10.0);
-		vec3 surfaceNormal = estimateNormal(pointOnSurface);
 		vec3 ambient = vec3(0.2, 0.2, 0.2);
   	  	vec3 diffusion = vec3(0.6, 0.2, 0.2);
    	 	vec3 specular = vec3(1.0, 1.0, 1.0);

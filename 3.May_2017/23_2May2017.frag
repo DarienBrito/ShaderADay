@@ -6,6 +6,24 @@ Shader-a-day
 Darien Brito, 23 May 2017
 */
 
+
+
+// struct Object
+// {
+// 	uint index;
+// 	float distance;
+// 	vec3 hitPosition;
+// 	vec3 hitNormal;
+// 	Material material;
+// };
+
+// Object scene(vec3 p) {
+// 	Object o;
+// 	float s = sphere(p, 1.0);
+// 	o.distance = s;
+// 	return o
+// }
+
 #define STEPS 64
 #define HI_THRES 100.0
 #define LO_THRES 0.001
@@ -131,26 +149,39 @@ vec3 singleLight(vec3 normal, vec3 lightColor, vec3 lightDir, vec3 ambient_color
 
 }
 
-vec3 lambertianLight(vec3 p, float dist, float fogVal){
-		vec3 material = vec3(.23, .22, 0.75); 
-		vec3 normal = getNormals(p, 0.01);
-		vec3 ambient_color = vec3(0.76, 0.5, 0.24);
-		
-		vec3 light1 = singleLight(normal, 
-			vec3(.8, .8, .9), //light color
-			 normalize(vec3(1.0, 1.0, 0.5)), // lightDir
-			 ambient_color // ambientColor
-			 ); 
+// phong shading
+vec3 phongLight( vec3 v, vec3 n, vec3 eye ) {
+	// ...add lights here...
+	float shininess = 50.0;
+	vec3 final = vec3( 0.0 );
+	vec3 ev = normalize( v - eye );
+	vec3 ref_ev = reflect( ev, n );
+	
+	// Light Component
+	vec3 light_pos   = vec3( 0.0, 20.0, 0.0 );
+	vec3 light_color = vec3( 1.0, 0.7, 0.7 );
+	vec3 vl = normalize( light_pos - v );
+	float diffuse  = max( 0.0, dot( vl, n ) );
+	float specular = max( 0.0, dot( vl, ref_ev ) );
+	specular = pow( specular, shininess );
+	final += light_color * ( diffuse + specular ); 
 
-		vec3 light2 = singleLight(normal, 
-			vec3(.1, 0.9, 0.5), //light color
-			 normalize(vec3(-1.0, 1.0, 1.0)), // lightDir
-			 ambient_color // ambientColor
-			 ); 
+	return final;
+}
 
-	    vec3 diffuse_light = material * light1 + material * light2;
-	    float fog = pow(1.0 / (1.0 + dist), fogVal);
-	    return diffuse_light * fog;
+// phong shading
+vec3 phongLight(vec3 ambientLight, vec3 dif, vec3 spec, float shininess, vec3 p, vec3 eye, vec3 light_pos, vec3 light_intensity) {
+	vec3 color = vec3(0.0);
+	color += ambientLight;
+	// Phong calculation
+	vec3 surfaceNormal = getNormals(p, 0.1);
+	vec3 lightDir = normalize(light_pos - p);
+	vec3 viewPoint = normalize(eye - p);
+	vec3 reflection = normalize(reflect(-lightDir, surfaceNormal));
+	float diffuse = max(0.0, dot(lightDir, surfaceNormal));
+	float specular = max(0.0, dot(reflection, viewPoint));
+	vec3 lightValue = light_intensity * (dif * diffuse + spec * pow(specular, shininess));
+	return color += lightValue;
 }
 
 /*	
@@ -175,7 +206,7 @@ float rayMarch(vec3 origin, vec3 direction, out vec3 p){
 	return HI_THRES;
 }
 
-vec3 viewRay(float fov, vec2 resolution, vec2 coords){
+vec3 rayDir(float fov, vec2 resolution, vec2 coords){
 	vec2 xy = coords - (resolution * 0.5);
 	float z = resolution.y / tan(radians(fov) * 0.5);
 	return normalize(vec3(xy, -z));
@@ -189,17 +220,26 @@ vec3 viewRay(float fov, vec2 resolution, vec2 coords){
 
 void main() {
 	vec3 camera = vec3(0.0, 0.0, 5.0);
-	vec3 direction = viewRay(45.0, u_resolution, gl_FragCoord.xy);
-	vec3 p = vec3(0.0);
-	float dist = rayMarch(camera, direction, p);
+	vec3 direction = rayDir(45.0, u_resolution, gl_FragCoord.xy);
+	vec3 pointOnSurface = vec3(0.0);
+	float dist = rayMarch(camera, direction, pointOnSurface);
 	vec3 color;
 	if(dist > (HI_THRES - LO_THRES)){
 		color = vec3(0.0);
 		gl_FragColor = vec4(color, 1.0);
 		return;
 	}
+	
+	// Parameters for light	
+	vec3 lightPosition = vec3(0.5, 1.0, 2.0);
+	vec3 ambient = vec3(0.025);
+	vec3 diffusion = vec3(0.9, 0.2, 0.2);
+	vec3 specular = vec3(0.7);
+	float shininess = 20.0;
+	vec3 light_intensity = vec3( 1.0, 0.7, 0.7 );
 
-	color = lambertianLight(p, dist, 0.1);
+	color = phongLight(ambient, diffusion, specular, shininess, pointOnSurface,
+		camera, lightPosition, light_intensity);
 	gl_FragColor = vec4(color, 1.0);
 }
 
