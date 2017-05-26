@@ -3,14 +3,14 @@ Light study, with Phong shading
 
 Implementing some data management
 suggestions by shader-pal Tim Gerritsen,
-namely re-arranging stuff in structs
+namely re-arranging stuff in structs, which us handy as f*ck!
 
 Notice that up intil now, I have been 
 treating the light position as equal to
 the light direction. This may change
 when implementing other types of light...
 
-Mmm, light doesn't seem correct though... is it?
+Mmm, is light calculation correct? 
 ----------------------------------------
 Shader-a-day
 Darien Brito, 26 May, 2017
@@ -21,7 +21,7 @@ Darien Brito, 26 May, 2017
 #define HI_CLIP 100.0
 
 #define NUM_LIGHTS 3
-#define STEPS 32
+#define STEPS 64
 #define PI 3.141592653589
 #define HALF_PI 1.570796326795
 
@@ -102,7 +102,7 @@ vec3 getNormal(vec3 p){
 	return normalize(vec3(x,y,z));
 }
 
-vec3 lambertianLight(Light l, float fogVal, Object o) {
+vec3 lambertianLight(Light l, Object o, float fogVal) {
 		vec3 ambient_color = o.material.ambient * o.material.ambientIntensity;
 		float diffuse = max(0.0, dot(l.direction, o.normal));
 		vec3 lightContribution = l.intensity * (l.color * diffuse) + ambient_color;
@@ -111,7 +111,7 @@ vec3 lambertianLight(Light l, float fogVal, Object o) {
 		return lightContribution * fog; 
 }
 
-vec3 phongLight(Object o, Ray r, Light l) {
+vec3 phongLight(Object o, Ray r, Light l, float fogVal) {
 	vec3 ambientLight = o.material.ambient * o.material.ambientIntensity;
 	vec3 lightDir = normalize(l.direction - o.position);
 	vec3 viewPoint = normalize(r.origin - o.position);
@@ -119,8 +119,9 @@ vec3 phongLight(Object o, Ray r, Light l) {
 	float diffuse = max(0.0, dot(lightDir, o.normal));
 	float specular = max(0.0, dot(reflection, viewPoint));
 	vec3 lightValue = l.color * (o.material.diffuse * diffuse + o.material.specular * pow(specular, o.material.shininess));
+	float fog = pow(1.0 / (1.0 + o.totalDistance), fogVal);
 	lightValue *= l.intensity;
-	return ambientLight + lightValue;
+	return (ambientLight + lightValue) * fog;
 }
 
 void main() {
@@ -142,10 +143,10 @@ void main() {
 	lights[0] = Light(vec3(1.0), vec3(1.0, 0.0, 0.0), normalize(vec3(-1.0, -0.5, 1.0)));
 	lights[1] = Light(vec3(1.0), vec3(0.0, 1.0, 0.0), normalize(vec3(1.0, -0.5, 1.0)));
 	lights[2] = Light(vec3(1.0), vec3(0.0, 0.0, 1.0), normalize(vec3(0.0, 1.0, 1.0)));
-
-	for(int i = 0; i < NUM_LIGHTS; i++){
-		color += phongLight(o, r, lights[i]);
-//		color += lambertianLight(lights[i], 0.01, o);
+	for(int i = 0; i < NUM_LIGHTS; i++) {
+	//	color += lambertianLight(lights[i], o, 0.01);
+		color += phongLight(o, r, lights[i], 0.1);
+	
 	}
 	gl_FragColor = vec4(color, 1.0);
 }
