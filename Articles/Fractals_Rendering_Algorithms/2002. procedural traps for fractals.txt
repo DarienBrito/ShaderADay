@@ -1,0 +1,29 @@
+website
+articles
+procedural orbit traps
+After having tried geometric orbit traps and bitmap orbit traps it was the time for procedural orbit traps. The idea, as before, define an orbit trap and see hot the point under iteration related to it. This time the traps are going to be not a simple mathematical formula nor a bitmap, but a potentially complex procedural function. 
+
+
+
+Coloring with a procedural orbit traps (2003). The trap is itself a Mandelbrot set
+
+
+For example, the image above is a zoom into one of the spirals of a Julia set. In the exterior of the fractal the orbit diverges and is trapped into a procedural orbit trap which is a Mandelbrot set itself. That makes the Mandelbrot set fractal to be repeated all over the plane.
+
+Of course when one speaks of procedural patterns the first thing one thinks about is Perlin noise and fbm/turbulence constructions. It is possible indeed to define a perlin-noise based orbit trap too.
+
+
+An fbm/perlin orbit trap
+
+
+An fbm/perlin orbit trap
+
+
+
+Some famous fractal artists used the old Pickover's "pop-corns" formulas as procedural orbit trap to produce some very nice images. Basically, anything you can possibly imagine can be embedded in a fractal as long as you can procedurally describe it.
+
+Another procedural orbit trap
+
+
+
+inigo quilez 1994-2017

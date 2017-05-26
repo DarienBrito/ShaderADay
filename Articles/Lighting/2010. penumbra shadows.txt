@@ -1,0 +1,65 @@
+website
+articles
+free penumbra shadows for raymarching distance fields
+Intro
+
+One of the many advantes of distance fields, is that they naturally provide global information. This means that when shading a point, one can easily explore the surrounding geometry by simply querying the distanve funcion. Unlike in a classic rasterizer (REYES or scaline based), where one has to bake the global data somehow as a preprocess for later consumtion (in a shadowmap, depthmap, pointcloud...), or in a raytracer where finding global information must be done by sampling the geometry by raycasting, in a distance field the information is ready for use at shading time, pretty much for free ("free" with many quotes of course). This means that many of the more realistic shading and ilumination techniques are easy to implement with distance fields. And this is even more true when sampling/rendering distance fields with a raymarcher. In this article we are going to exploit this nice properties to render soft shadows with penumbra, for free, when doing raymarching based rendering.
+
+soft shadow and penumbra computed for free
+
+
+classic shadow raycasting
+
+
+
+The trick
+
+So, let's assume you have a distance field encoded in function float map(vec3 p). You can see how to construct some basic distance functions here. Just let's assume, for simplicity, that this map() function contains all of the world you are rendering, and that all objects are allowed to cast shadows in all other objects. Then, the easy way to compute shadowing information at a shading point, is to raymarch along the light vector, as far as the distance from the light to the shading point is, until an intersection is found. You can probably do that with some code like this:
+float shadow( in vec3 ro, in vec3 rd, float mint, float maxt )
+{
+    for( float t=mint; t < maxt; )
+    {
+        float h = map(ro + rd*t);
+        if( h<0.001 )
+            return 0.0;
+        t += h;
+    }
+    return 1.0;
+}
+This code works beautifully, and produces nice and accurate sharp shadows, as seen in the top-rightmost image in the articles. Now, we can add only one line of code and make this look much better. The trick is to think what happens when a shadow ray doesn't hit any object, but was just pretty close to do so. Then, perhaps, you want to put that point you are shading under penumbra. Probably, the closest your point was to hit an object, the darker you want to make it. Also, the closest this happened from the point you are shading, the darker too. Well, it happens that as we raymarched our shadow ray, both these distances where available to us! Of course he first one is h in the code above, and the second one is t. So, we can simply compute a penumbra factor for every step point in our marching process and take the darkest of all penumbras.
+float softshadow( in vec3 ro, in vec3 rd, float mint, float maxt, float k )
+{
+    float res = 1.0;
+    for( float t=mint; t < maxt; )
+    {
+        float h = map(ro + rd*t);
+        if( h<0.001 )
+            return 0.0;
+        res = min( res, k*h/t );
+        t += h;
+    }
+    return res;
+}
+This simple modification is enough to generate the much nicer left image in the begining of this page. As you can see, the improvement is massive: not only you get soft shadows, but they even behave realistically as when shadows are sharp next to ocluder and ocludee contact (see where the bridge touches the floor) and much softer penumbras when the ocluder is far from the ocluded point. This, at the cost of one division per marching point, which represents a zero cost relative to the evaluation of map().
+
+Of course, the k parameter in the function controls how hard/soft the shadows are. See images on the right of this text to compare the same shadow rendered with different values of k.
+
+So, basically, if you can do classic raymarched shadows, you can do soft shadows with penumbras too. For free!
+
+The image below shows an example of the technique in action, in a raymarched procedural distance field:
+
+
+soft penumbra shadows in action
+
+
+k = 2
+
+k = 8
+
+k = 32
+
+k = 128
+
+
+
+inigo quilez 1994-2017

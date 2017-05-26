@@ -1,0 +1,35 @@
+website
+articles
+bitmap orbit traps
+Back in 2002 I though to extend the idea of orbit traps for coloring fractals so I wasn't restricted only to geometrical figures. My first idea was to "draw" the trapping area into a bitmap, and lookup in the bitmap for every point of the orbit to see if there was a "hit" or not. 
+
+
+
+Coloring with bitmap orbit traps, made in 2002 - Click image to enlarge
+
+
+The image above made it into the first position of the National Fractal Art Contest of 2002 in Spain (click here for the results). The pink-bunny image belongs to Made, the demoscene graphician.
+
+
+
+The second idea was to do orbit traps with real distances to the trap. For that to work I made a black and white image with the trap area in black, and then for every white pixel I computed the distance to the closest black pixel. The resulting grey-scale image encoded the 2D distance field that I could use as true replacement for geometric traps in the regular orbit trap algorithm:
+
+
+The input trap image
+
+
+Precomputed distance field
+
+
+Resulting image
+
+
+
+
+An example of basic in/out trap algorithm can be found here:
+
+
+ 
+
+
+inigo quilez 1994-2017

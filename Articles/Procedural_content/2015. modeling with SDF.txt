@@ -1,0 +1,19 @@
+website
+articles
+modeling with SDF
+Modeling with Signed Distance Fields
+
+Despute the title, this article is actually about a very particular use case of distance fields for content creation. Signed Distance Fields (SDF) are becoming a popular scene representation again (after many years) and we are starting to see them in demos and games. Even proper content creation tools are available to us, where coding is no longer required for the artist creating the content. Also, SDF can be converted into pixels in different ways: via raymarching, by polygonaizing the field of by splaint points into the screen. This article focuses only in the case of hand coding the distance field in GLSL and rendering it though raymarching in a single render pass.
+
+Shadertoy: https://www.shadertoy.com/view/ld3Gz2
+
+High resolution image: www.iquilezles.org/www/articles/sdfmodeling/AfterRain_5760x3240.png
+
+Process:
+
+
+
+
+
+
+inigo quilez 1994-2017

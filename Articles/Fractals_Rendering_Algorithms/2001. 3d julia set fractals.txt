@@ -1,0 +1,104 @@
+website
+articles
+3d julia sets
+The maths
+
+
+Rendering of 4D Julia sets is as old as rendering voxels, plasmas, and all those good old effects. In fact, when I saw such images for the first time in the 99 the topic was already a decade old. However, I tried to do my own stuff again, and reinvent the wheel (yes, I like to do that). My idea was to simply extend the regular complex julia sets to three dimensions instead of doing what most people were doing - use quaternions. I though I didn't need to deal with four dimensions, but only three. Very naively, I defined my own "complex" numbers as like this:
+
+C = r·x + i·y + j·z 
+
+where r = 1 and i² = -1, just like in regular complex numbers. Then I defined j to be "something" behaving like this: j² = -1 and j·i = 0. Sort of imaginary number. Since if j² = -1 I found myself deriving that i = j, which was of course contradict the j·i = 0 statement. To fix this I decided to invent a new rule which said that it's forbidden to take square roots in both sides of i² = j² to conclude that i = j, in a similar fashion you can't divide by zero the expression 5*0 = 4*0 to demonstrate that 5 = 4 (in case you disagree with my game, let me remember you that we can invent whatever we want in mathematics, just as in any other creative activity of human being). So, the results were that
+
+i² = -1
+j² = -1
+i·j = 1
+
+With these definitions, the basic operations as addition or multiplication are as follow: if x = a + i·b + j·c and y = d + i·e + j·f, then,
+
+x+y = (a+d) + i·(b+e) + j·(c+f)
+
+x·y = (ad-be-cf) + i·(bd+ae) + j·(af+cd)
+
+
+A (constant step) raytmarched julia set - 2001
+
+The good thing is that if the third component of the number equal to zero it all reduces to regular complex arithmetic. To keep full compatibility with the standard complex numbers, the modulo of this new numbers is defined as the square root of the sum of each of the three components squared. I would like to recalc that this new numbers are not three dimensional vectors, just as the standard complex numbers are not 2d vectors. If they where, i·i should equal 1, not -1, since it "is" the dot product of a vector with itself. In the same way, these 3d complex numbers are not three dimensional vectors, although they can be represented as points in a volume. In fact, this was the original idea when defining this numbers: to have a (one dimensional) dynamical plane representable in a three-dimensional euclidean space. This should allow us to visualize the julia sets as a volumetric objects.
+
+So it is time to get the quadratic formula Z = Z² + C and decompose it in its three components in order to iterate the formula in the computer:
+
+Xn+1 = Xn·Xn - Yn·Yn - Zn·Zn + a 
+Yn+1 = 2·Xn·Yn + b 
+Zn+1 = 2·Xn·Zn+ c 
+
+where Zn = Xn + i·Yn + j·Zn and C = a + i·b + j·c. You can calculate the mapping derivative in the usual way to be able to compute de gradient of the Douady-Hubbard potential or the normal vector of the isosurface defined by the equipotential surface. For example partial derivatives for the 3d Mandelbrot set are
+
+
+
+Few years after I rendered my first fractals with the above maths (as the one on the top right corner of this page) I realized you don't need to keep track of the nine partial derivatives, as a complex number (the three dimensional one) is a scalar in itself and not a vector, therefore the normal derivative rules hold. That means, that you can use the straightforward
+
+
+
+that you would get by applying regular derivation rules to
+
+
+
+
+
+Rendering
+
+
+There are many ways to render Julia sets, I think I have tried them all. Polygons, voxels, raytracing, pointclouds... The easiest of all is probably raytracing (well, raymarching), and also the most elegant, since once you encapsulate the ray-julia intersection routines, you can apply all the regular lighting tricks of a raytracer (like global illumination) to your Julia set. The nice thing is that Julia sets can be raytraced in realtime today both in CPU or GPU. In the CPU I have implemented it with SSE2 for 2x2 ray-packet tracing support, and since my raytracer if full multithreaded, I got some interactive rendering with simple lighting (one shadow ray). On the GPU the thing runs amazingly fast, as shown in my Kindernoiser demo (last of three images to the right).
+
+For raytracing, you probably want to embed the set with a simple bounding volume like a sphere or a box, and raycast this volume first, and only trace the Julia set in case the ray intersected the volume at a distance that is smaller than the current closest intersection along that ray. Then you have to find the real intersection, which you can do stepping through the ray, until you hit the set. This can be done in brute force (stepping in constant steps) or in a more intelligent way. For example, at raymarching step you can invoke the distance estimator formula and get an approximate distance to the set (quite like if you were rendering with distance fields). The distance estimation formula has the nice property that it give an upper bound to the distance, therefore you can pick that estimated distance and safely do your step, until you are close enough to the intersection and you stop the raymarching. This is the recommended method, and for low amount of iterations (say, less than 16) you can very quickly find the intersection point (that's why it's realtime). You can have a look to the "Ray tracing deterministic 3-D fractals" article by D.J.Sandin from 1989 (I told you, 3d fractals are really old).
+
+Once the intersection point is found we need the surface normal (if such a thing existed for a fractal, but thankfully we are not rendering a real fractal, but just an approximation to it, a truncated version). I found most people is using some sort of central differences method here, Sandin himself included. I rather prefer to compute the analytical gradient to the potential function, or to the distance field (as calculated by the distance estimator mentioned above).
+
+
+A (distance field based) raymarched julia set - 2005
+
+
+
+Code
+
+
+Here you have some code for realtime rendering, usign the distance estimator: https://www.shadertoy.com/view/MsfGRr
+
+You can use the same distance estimator to raymarch cubic Julai sets too (or any other degree) - you just have to modify the computation of the derivative Z'n accordingly. You can see the code for it and the Julia set rendered in realtime here: https://www.shadertoy.com/view/lsl3W2
+
+
+
+Cubic Julia set, 2013
+
+
+
+More drawings and videos
+
+
+More renders from 2001, 2005 and 2007 
+
+
+Raymarched in the CPU, interactive, 2005
+
+
+
+Raymarched in the GPU, in realtime - 2007
+
+Raymarched in the CPU, interactive, 2005
+
+
+Raymarched in the CPU, interactive, 2005
+
+Raymarched in the CPU, 2001
+
+
+Raymarched in the CPU, 2001
+
+Raymarched in the CPU, 2001
+
+
+Raymarched in the CPU, 2001
+
+
+
+inigo quilez 1994-2017

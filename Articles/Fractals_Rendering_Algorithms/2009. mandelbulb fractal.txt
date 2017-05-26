@@ -1,0 +1,112 @@
+website
+articles
+mandelbulb
+The Mandelbulb fractal has been the fractal of the year, yet the hype around it lasted for no more than a month. I guess that gives an idea of how out of fashion fractals are today. Nevertheless it's an interesting fractal that might encourages the most brave fractal researchers left to further explore this branch of maths and computer graphics. I don't consider myself a researcher in the field of fractals as I do recognize my lack of proper academic background, depth of understanding of the field and lack of dedication unlike others who know little and do bad yet they pretend being experts. Nevertheless, just as any other fractal hobbyst that deserves such a geeky title, I did my experiments on rendering Mandelbulb (and other further math investigations) when the inertia of the hype moment told me to do so. I must say it was a fun time and I truly thank those who started the wave in the first place, that was really fun.
+
+
+
+A Mandelbulb fractal rendered in realtime over mobile phone footage
+
+
+The idea
+
+The idea that originated the wave of Mandelbulb fractal was that of trying, once more, to extend the definition of the classic Mandelbrot set to three dimensions. Quaternions, hypercomplex numbers and all other sort of (often inconsistent) algebras had been used as an attempt to generate the all-time-dream of a true 3D Mandelbrot set. Up to this point the closest thing to a 3D Mandelbrot set were very symmetric extrapolations of the 2D set, like the once I did myself back in 2001.
+
+However the construction of the Mandelbulb has a different approach. Instead of thinking in algebra and in the usual iteration formula w->w^2+c, this time we think on the classic 2D set as the result of a geometric process of iterating points by squaring their distance to the origin, rotating them by an angle equal to the current angle with the positive x axis, and then translating by c. Now it's possible to try to extend this geometric process to three dimensions regardless of any algebraic correctness. And in fact the Mandelbulb formula is completely wrong and incoherent in terms of a dynamic system, but it produces beautiful images, which is in itself a sign that, perhaps, algebraic correctness is not what we always want. In fact, most of the proto-Mandelbulb images shown in the forums were produced with buggy code that implemented the geometric transformations completely wrong, with incorrect derivatives calculation for the distance estimation, etc, yet the images were looking just right. The lesson learnt with this is that there is something about duplicating lengths and angles that for some reason makes sense, not only regardless of algebraic correctness of meaning, but even regardless of any geometric interpretation (remember wrong geometric formulas led to nice images anyway). This idea is reinforced by the fact that when breaking the rule of equal length exponentiation to equal angle multiplication, then the images do indeed (finally!) look wrong.
+
+
+The algorithm
+
+Because in the end any formula that follows the equal-length-exponentiation-to-equal-angle-multiplication will do it, I will choose the one that is geometrically correct. If you are unsure if the code you read in other forums or websites is correct, follow the one here, I assure the one here is correct.
+
+The basic formulation of the Mandelbulb is derived from extracting the polar coordinates of a 3d point and doubling its angles and squaring it's length. The idea can be generalized to other numbers like three, or the more popular case of eight. We will in fact choose the arbitrary value of eight, because for higher powers the asymptotic behaviour of the formulas tends to produce more symmetric shapes (which is another sign that indeed the starting point of multiplying these arbitrary angles is wrong). So, let's call w to our 3D point, then choose eight as out Mandelbrot power, and so multiply the polar angles of our 3D point by eight and expand it's modulo by a power of eight:
+
+  // extract polar coordinates
+  float wr = sqrt(dot(w,w));
+  float wo = acos(w.y/wr);
+  float wi = atan(w.x,w.z);
+
+  // scale and rotate the point
+  wr = pow( wr, 8.0 );"
+  wo = wo * 8.0;"
+  wi = wi * 8.0;"
+
+  // convert back to cartesian coordinates
+  w.x = wr * sin(wo)*sin(wi);
+  w.y = wr * cos(wo);
+  w.z = wr * sin(wo)*cos(wi);
+
+We only have to add c to w now and iterate it in the regular way. You can pretty much then take the code and insert it in your favourite raymarching engine (like this very old but simple one), unless you care about rendering speed.
+
+
+
+Optimizing
+
+The above code is mathematically correct, and even fast enough to run in realtime in modern hardware. However, one can still gain a 5x speed factor when rendering in some cases (like when rendering in the CPU in pure C or C++).
+
+The first thing to do is, as usual, to get rid of all those transcendental functions (the trigonometric ones) which not only are slow but also introduce unnecesary errors in the computations. By using the basic trigonometric identities of the cosinus and sinus of a doubled angle, one can replace the 8-times angle computations by repeatedly applying the identities (three times). The result is a polynomial which has no trigonometric functions and runs much faster:
+
+  float x = w.x; float x2 = x*x; float x4 = x2*x2;
+  float y = w.y; float y2 = y*y; float y4 = y2*y2;
+  float z = w.z; float z2 = z*z; float z4 = z2*z2;
+
+  float k3 = x2 + z2;
+  float k2 = inversesqrt( k3*k3*k3*k3*k3*k3*k3 );
+  float k1 = x4 + y4 + z4 - 6.0*y2*z2 - 6.0*x2*y2 + 2.0*z2*x2;
+  float k4 = x2 - y2 + z2;
+
+  w.x =  64.0*x*y*z*(x2-z2)*k4*(x4-6.0*x2*z2+z4)*k1*k2;
+  w.y = -16.0*y2*k3*k4*k4 + k1*k1;
+  w.z = -8.0*y*k4*(x4*x4 - 28.0*x4*x2*z2 + 70.0*x4*z4 - 28.0*x2*z2*z4 + z4*z4)*k1*k2;
+
+You can find a realtime implementation of this here: https://www.shadertoy.com/view/ltfSWn
+
+
+Coloring
+
+When it comes to rendering, the Mandelbulb can be colored just as any other 3D fractal. Surprisingly nobody that I know out there are coloring 3D fractals so far. Most of them either use a constant color, use the normal to pick a color, or use a random perlin noise pattern to assign a different color to every point in the surface of the set.
+
+In my experiments I opted for using the old orbit traps method applied in 3D but using the results to assign a color. What I did is to compute four orbit traps. One of the traps was the origin, and the other three traps were the x=0, y=0 and z=0 planes. The last three traps were used to mix the basic surface color with three other colors. The point trap in the origin was used as a multiplicative factor to the color, which simulated some ambient occlusion.
+
+The improvement from the other rudimentary coloring methods is that because the behaviour of the orbit traps follows the fractal structure of the set, so do the colors, and therefore we get meaninful color patterns emerging in the surface as opposed to generic perlin noise based coloring.
+
+
+Detail of the Mandelbulb. Click to enlarge
+
+
+Rendering
+
+Rendering happens as usual, like for any other 3D fractal. My implementation of the Mandelbulb runs realtime for moderate screen resolutions (say, 800x600) with shadows, but no antialiasing when run on a GPU, and takes a few seconds to render in the CPU. To get this speed one has to use distance based raymarching. In the implementation I used to compute the images and videos in this page there was a subtile thing going on, tho. For raymarching with distance fields one needs to be able to compute (an estimation of) the distance from any point to the surface of the set. The well-known distance formulation for polynomial Julia (and Mandelbrot) sets involves the derivatives of the function being iterated. At the time of implementation I didn't want to extract the Jacobian of the formulas above which would then give me the derivatives, as the formulas where complex and I didn't have any copy of mathematica handy. Others (like in the forum linked above) have proposed formulas for the derivatives which are all wrong, and so far I have not seen any implementation of the Mandelbulb out there using the right code (but many of them believe are doing the right thing cause they simply copied the code from old Quaternion based Julia set renderers). So, I preferred to take another approach while waiting to have a copy of mathematica or some free time to extract the Jacobians manually.
+
+I based my solution in the Hubbard-Douady potential theory, which is in turn the principle used to extract the official distance estimation formula. But instead of using the distance estimation formula I applied the raw definition of distance, which is
+
+
+
+where G(c) is the H-D potential as is computed as for the regular 2D Mandelbrot set or any other polynomial:
+
+
+
+with p being the power of our set (eight in our case, and two for the classic Mandelbrit set). G'(c) is of course the gradient of the potential, and can be approximated by central differences as usual, and that can be used as shading normal once the intersection of the ray with the set is found.
+
+
+
+Orbit trap for coloring. Note that there are no lighting computations of any sort going on
+Experiments
+
+The first video is a close zoom to the surface of the fractal object, and the second one is a morphing of the associated Julia sets of the Mandelbulb set.
+
+
+
+
+
+
+
+
+
+
+
+Click image to enlarge
+
+
+
+inigo quilez 1994-2017

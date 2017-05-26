@@ -1,0 +1,25 @@
+website
+articles
+3d orbit traps
+Quick experiments on orbit traps to regular 3D Julia sets. I had the idea of trying something like this since one year and a half at least, and I finally found the perfect afternoon to try it. All the images below are the result of that interesting experimental session. Rendering was done based on point clouds (like here, meaning that you can inspect the fractals in real time). The lighting (that contains both a shadowed directional light and ambient occlusion) is precomputed and stored in each particle.
+
+Because it was a short experiment, I didn't research on how to compute analytic normals for the objects. Instead I estimated the normals by a variation of central differences in the voxel itself.
+
+The first two images used sinus traps, the two following lines traps, the next point traps, and the last a combination of lines and point traps. You can click the small images below to enjoy a higher resolution version.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+inigo quilez 1994-2017

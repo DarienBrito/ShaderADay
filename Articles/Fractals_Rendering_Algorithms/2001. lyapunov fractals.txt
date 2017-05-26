@@ -1,0 +1,25 @@
+website
+articles
+lyapunov fractals
+The Lyapunov fractals are also classic in the fractal rendering scene of the 90s. The Lyapunov exponent is a mathematical tool to measure the amount of chaos in a sequence of data or orbit. It's often used to render Mandelbrot and Julia sets, or study 1d chaotic maps. But in the 90s it was used to create some nice images by professor Mario Markus in Germany, and since them "Lyapunov Fractals" has been used to name his images.
+
+The idea is very simple, and can be found described in many web sites, and also in the manual of Fractint.
+
+
+
+Click to enlarge
+
+I used a trick to avoid slow computation time, since the Lyapunov exponent is as
+
+
+
+one can use the properties of the logarithm to transform the expression above into
+
+
+
+so that the expensive logarithm operation has to be computed only once after the iterations, and not once per iteration. This of course has the problem of precision, since the multiplication of derivatives can quickly get huge.
+
+I experimented with these back in 2001 (see image above), and then remade it in Shadertoy for your referene: https://www.shadertoy.com/view/Mds3R8 
+
+
+inigo quilez 1994-2017
