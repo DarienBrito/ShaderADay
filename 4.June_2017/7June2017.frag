@@ -57,7 +57,7 @@ void main()
    	vec3 normal = getNormal(w);
     
     float diffusion = max(dot(r, -normal), 0.0);
-    float fog = diffusion * 50.0 / d * 2.0 + fd - 10.0; 
+    float fog = diffusion * 50.0 / d * 2.0 + fd - .9; 
     
     vec3 sc = vec3(0.1, 0.3, 1.0);
     vec3 ec = vec3(0.9, 0.0, 0.0);
