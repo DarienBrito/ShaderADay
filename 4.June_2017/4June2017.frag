@@ -65,13 +65,8 @@ float scene(vec3 p) {
 	float amp = .3;
 	vec3 q = repeat(p, vec3(5.0));
 	float displace = sine(q.x, freq, amp) * sine(q.y, freq, amp) * sine(q.z, freq, amp);
-	float s1 = sphere(q * rotatey(u_time) + displace, 1.0);
-
-	float sp1 = sphere(p, 0.5);
-	float sp2 = sdBox(p + displace, vec3(0.5, 0.1,0.1), 0.3);
-	float s2 = intersectOP(sp1, sp2);
-
-	return 	unionOP(s1, s2);
+	float s1 = sphere(q * rotatey(u_time) + displace, 1.5);
+	return s1;
 }
 
 float rayMarch(vec3 origin, vec3 direction, out vec3 p) {
@@ -106,9 +101,9 @@ vec3 getNormal(vec3 p) {
 
 vec3 phong(vec3 p, vec3 eye, vec3 normal) {
 	vec3 material = vec3(0.1, .2, .4);
-	
+
 	vec3 ambient = vec3(1.0) * 0.1;
-	vec3 light_pos = vec3(-2.0, 3.0, 2.0);
+	vec3 light_pos = vec3(0., 0., 0.0);
 	//vec3 light_pos = vec3(cos(u_time), sin(u_time), 1.0);
 	
 	vec3 light_dir = normalize(light_pos - p);
