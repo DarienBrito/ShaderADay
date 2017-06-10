@@ -17,8 +17,6 @@ uniform float u_time;
 float map(vec3 p) {
     float density = 0.5;
     vec3 q = (fract(p * density) * 2.0 - 1.0); // Make it signed 
-    vec3 s = 0.5 - abs(normalize(q));
-    //q = sign(q) * s; //Extracts the sign, -1 if < 0, 0.0 if 0.0, +1 if > 0
     return length(q);
 }
 
