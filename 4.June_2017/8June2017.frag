@@ -1,5 +1,8 @@
 /*
 Re-cap
+
+based on code by dila
+https://www.shadertoy.com/view/4lSXDw
 --------------------
 Shader-a-day
 Darien Brito, 8 June 2017
@@ -57,7 +60,7 @@ vec3 rayDir(float fov, vec2 resolution, vec2 coords) {
 
 
 void main() {
-	vec3 camera = vec3(0.0, 0.0, u_time);
+	vec3 camera = vec3(0.0, 0.0, u_time * 0.1);
 	vec3 direction = rayDir(90.0, u_resolution, gl_FragCoord.xy);
 	vec3 p;
 	float dist = rayMarch(camera, direction, p);
