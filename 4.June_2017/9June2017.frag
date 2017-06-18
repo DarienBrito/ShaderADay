@@ -79,10 +79,3 @@ void main() {
     color = phong(p, camera, -normal);
     gl_FragColor = vec4(color, 1.0);
 }
-
-
-
-
-
-
-

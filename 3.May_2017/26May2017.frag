@@ -70,7 +70,7 @@ float scene(vec3 p) {
 	return opUnion(s1, s2);
 }
 
-float rayMarch(vec3 origin, vec3 direction, out vec3 p){
+float rayMarch(vec3 origin, vec3 direction, inout vec3 p){
 	float totaldistance = 0.0;
 	for (int i = 0; i < STEPS; ++i){
 		p = origin + (direction * totaldistance);

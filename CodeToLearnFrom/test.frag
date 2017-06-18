@@ -1,4 +1,4 @@
-
+//
 //Some of the sources I used to construct this scene:
 //Distance Functions (http://iquilezles.org/www/articles/distfunctions/distfunctions.htm)
 //https://www.reddit.com/r/twotriangles/comments/1hy5qy/tutorial_1_writing_a_simple_distance_field/
@@ -50,7 +50,7 @@ float scene(vec3 rayPos)
    float booleanFloor = max(dist_b, -dist_a); // this cuts a sphere into the plane
   
    //return min(uberSphere(rayPos),booleanFloor); //this combines the floor with our uber sphere for the final scene
-   return min(uberSphere(rayPos),dist_b); // simplifed the scene with this line. comment this out and uncomment the above line for some additional boolean logic
+   return min(dist_a, dist_b); // simplifed the scene with this line. comment this out and uncomment the above line for some additional boolean logic
 }
 
 //normals

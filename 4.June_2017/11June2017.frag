@@ -13,10 +13,21 @@ for example. Otherwise will compile to a black screen.
 
 */
 
+
 uniform sampler2D u_tex0;
 uniform vec2 u_tex0Resolution;
-
 uniform float u_time;
+uniform vec2 u_resolution;
+
+#define PI 3.141592653589
+
+float gaussian(float x) {
+	float mean = 0.0;
+	float sigma = 1.0; // standard deviation
+	float gauss = ((pow(x - mean, 2.0) / (2.0 * pow(sigma, 2.0))) * -1.0) * 
+	(1.0 / (sigma * sqrt(2.0 * PI)));
+	return gauss;
+}
 
 void main() {
     vec2 currentCoord = vec2(gl_FragCoord.x / u_tex0Resolution.x, gl_FragCoord.y / u_tex0Resolution.y);
