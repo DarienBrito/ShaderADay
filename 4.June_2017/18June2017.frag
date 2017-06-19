@@ -1,7 +1,7 @@
 /*
 Compositing primitives
 Shader-a-day
-Darien Brito, 26 May, 2017
+Darien Brito, 18 June, 2017
 */
 
 #define LO_CLIP 0.001
