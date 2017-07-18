@@ -4,4 +4,4 @@
 
 ## Update
 
-Due to life I have been unable to code anything for almost a month. Is pretty hard to keep consistency but I'll do my best to keep in track!
+Due to life I have been unable to code anything for almost a month in between June and July... is pretty hard to keep consistency but I'll do my best to keep in track!
