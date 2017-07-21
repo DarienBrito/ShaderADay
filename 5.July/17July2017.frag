@@ -3,7 +3,7 @@ Wavy swirls
 Coming back from a long silence...
 --------------------
 Shader-a-day
-Darien Brito, July 2017
+Darien Brito, July 2017f
 */
 
 uniform vec2 u_resolution;
