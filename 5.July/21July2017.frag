@@ -1,5 +1,5 @@
 /*
-
+Stencil
 --------------------
 Shader-a-day
 Darien Brito, 
@@ -41,7 +41,7 @@ float fbm(vec2 st, int depth) {
 
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
-	float l = length(st - vec2(0.5));
+	float l = 1.0 - step(0.3,length(st - vec2(0.5)));
 
 
 	float n = fbm(st * 45. * fbm(st * 4., 2), 4);
