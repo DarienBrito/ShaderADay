@@ -2,7 +2,7 @@
 The stone - Pixel Spirit
 --------------------
 Shader-a-day
-Darien Brito, 11 August
+Darien Brito, 12 August
 */
 
 uniform vec2 u_resolution;
