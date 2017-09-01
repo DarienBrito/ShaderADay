@@ -17,7 +17,7 @@ float stripe(vec2 st) {
 
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution;
-	float c1 = (1.0 - circle(st + vec2(0.1, 0.0), 0.2));
+	float c1 = 1.0 - circle(st + vec2(0.1, 0.0), 0.2);
 	float c2 = 1.0 - circle(st + vec2(-0.1, 0.0), 0.2);
 	float c = c1 * c2;
 	float split = stripe(st - 0.25);
