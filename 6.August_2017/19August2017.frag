@@ -2,7 +2,7 @@
 The Empress
 --------------------
 Shader-a-day
-Darien Brito, August 2017
+Darien Brito, 19 August 2017
 */
 
 #define PI 3.141592653589

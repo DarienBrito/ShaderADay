@@ -2,7 +2,7 @@
 Bundle
 --------------------
 Shader-a-day
-Darien Brito, 31 August, 2017
+Darien Brito, 20 August, 2017
 */
 
 #define PI 3.141592653589
