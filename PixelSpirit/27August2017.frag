@@ -1,10 +1,3 @@
-/*
-The Lovers	
---------------------
-Shader-a-day
-Darien Brito, August 27 2017 
-*/
-
 #define PI 3.141592653589
 #define TWO_PI 6.28318530718
 #define HALF_PI 1.570796326795
@@ -38,6 +31,12 @@ float heart(vec2 st) {
 	float sx = 0.6;
 	float sy = 1.1;
 	return x*x + pow(y*sy - sqrt(abs(x*sx)), 2.) - 1.;
+}
+
+float stroke(float x, float s, float w) {
+	float d = 	step(s, x+w * .5) - 
+				step(s, x-w * .5);
+	return clamp(d, 0., 1.);
 }
 
 float shape(vec2 st, int numSides, float s) {
