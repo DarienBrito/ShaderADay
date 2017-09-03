@@ -1,3 +1,11 @@
+/*
+The Lovers
+--------------------
+Shader-a-day
+Darien Brito, 27 August, 2017
+*/
+
+
 #define PI 3.141592653589
 #define TWO_PI 6.28318530718
 #define HALF_PI 1.570796326795

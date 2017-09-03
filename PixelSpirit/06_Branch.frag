@@ -1,5 +1,5 @@
 /*
-PixelSpirit - Temperance
+PixelSpirit - Branch
 --------------------
 Shader-a-day
 Darien Brito, August 5 2017

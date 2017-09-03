@@ -1,5 +1,5 @@
 /*
-The shadow - Pixel Spirit
+Opposite - Pixel Spirit
 --------------------
 Shader-a-day
 Darien Brito, 16 August 2017 
